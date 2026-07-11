@@ -49,11 +49,11 @@ export interface Category {
 }
 
 const getWordPressUrl = (): string => {
-  const url = process.env.NEXT_PUBLIC_WORDPRESS_URL;
+  let url = process.env.NEXT_PUBLIC_WORDPRESS_URL;
   if (!url || url === 'https://your-wordpress-site.com' || url.includes('your-wordpress-site')) {
     return '';
   }
-  return url;
+  return url.replace(/\/+$/, '');
 };
 
 const countWords = (html: string): number => {

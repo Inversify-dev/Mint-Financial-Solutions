@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const wpBase = process.env.NEXT_PUBLIC_WORDPRESS_URL;
+    const wpBase = (process.env.NEXT_PUBLIC_WORDPRESS_URL || '').replace(/\/+$/, '');
     if (!wpBase) {
       return NextResponse.json({ message: 'WordPress URL is not configured.' }, { status: 500 });
     }
