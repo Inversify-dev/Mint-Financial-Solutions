@@ -17,7 +17,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import AnimatedCounter from '../components/AnimatedCounter';
-import { getBlogPosts, BlogPost } from '../lib/cms';
+import { BlogPost } from '../lib/cms';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 25 },
@@ -38,11 +38,17 @@ export default function HomePage() {
   const [latestPosts, setLatestPosts] = useState<BlogPost[]>([]);
 
   useEffect(() => {
-    getBlogPosts({ perPage: 3 }).then((res) => {
-      setLatestPosts(res.posts);
-    }).catch((err: unknown) => {
-      console.error('Failed to load latest posts:', err);
-    });
+    fetch('/api/blog-posts?perPage=3')
+      .then((res) => {
+        if (!res.ok) throw new Error('Network response was not ok');
+        return res.json();
+      })
+      .then((res) => {
+        setLatestPosts(res.posts || []);
+      })
+      .catch((err: unknown) => {
+        console.error('Failed to load latest posts:', err);
+      });
   }, []);
 
   const stats = [
