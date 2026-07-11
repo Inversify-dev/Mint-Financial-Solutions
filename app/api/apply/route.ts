@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const wpBase = (process.env.NEXT_PUBLIC_WORDPRESS_URL || '').replace(/\/+$/, '');
+    const wpBase = (process.env.NEXT_PUBLIC_WORDPRESS_URL || '').replace(/\/+$/, '') || 'http://mintb2b.solutions';
     if (!wpBase) {
       return NextResponse.json({ message: 'WordPress URL is not configured.' }, { status: 500 });
     }

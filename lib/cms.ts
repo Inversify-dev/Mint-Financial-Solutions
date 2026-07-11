@@ -51,7 +51,7 @@ export interface Category {
 const getWordPressUrl = (): string => {
   let url = process.env.NEXT_PUBLIC_WORDPRESS_URL;
   if (!url || url === 'https://your-wordpress-site.com' || url.includes('your-wordpress-site')) {
-    return '';
+    return 'http://mintb2b.solutions';
   }
   return url.replace(/\/+$/, '');
 };
