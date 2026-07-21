@@ -80,13 +80,13 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-neutral-950/95 backdrop-blur-md border-b border-neutral-900 py-3.5 shadow-lg"
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-neutral-950/95 backdrop-blur-md border-b border-neutral-900 py-3 shadow-lg"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             {/* Logo link */}
             <Link href="/" className="flex-shrink-0 transition-opacity hover:opacity-90">
-              <Logo height={42} light={true} />
+              <Logo height={54} light={true} />
             </Link>
 
             {/* Desktop Navigation Links */}
@@ -201,7 +201,7 @@ export default function Navbar() {
           }`}
       >
         <div className="flex justify-between items-center mb-8">
-          <Logo height={35} light={true} />
+          <Logo height={50} light={true} />
           <button
             onClick={() => setIsOpen(false)}
             className="p-2 rounded-xl text-white hover:bg-neutral-900"

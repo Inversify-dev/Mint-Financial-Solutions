@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 interface LogoProps {
   className?: string;
@@ -7,125 +8,17 @@ interface LogoProps {
   light?: boolean;
 }
 
-export default function Logo({ className = '', height = 40, showText = true, light = false }: LogoProps) {
-  // Dynamic color selection for the text and elements based on light/dark mode
-  const fillColor = light ? '#ffffff' : '#3a3a3a';
-  const greenColor = '#8ac23d';
-
+export default function Logo({ className = '', height = 54 }: LogoProps) {
   return (
-    <div className={`flex items-center gap-3 ${className}`} style={{ height }}>
-      <svg
-        viewBox="0 0 380 100"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-full w-auto"
-        aria-label="Mint B2B Solutions Logo"
-      >
-        {/* Stylized M */}
-        <path
-          d="M15 80V25H32.5L47.5 52.5L62.5 25H80V80H67.5V40L52.5 67.5H42.5L27.5 40V80H15Z"
-          fill={fillColor}
-        />
-
-        {/* Stylized I - Stem / Trunk of the Mint Leaf */}
-        <path
-          d="M93 80C94.5 73.5 95 64.5 95 55C95 44 91.5 35.5 89 28H101C102.5 35 104 43.5 104 55C104 65.5 102.5 74 101.5 80H93Z"
-          fill={fillColor}
-        />
-
-        {/* Three Mint Leaves branching from top of I */}
-        {/* Leaf 1 (Top Left Leaf - small) */}
-        <path
-          d="M87.5 29.5C82 30 73 24.5 75 19.5C77.5 13.5 88.5 20.5 90 23C90.5 24 90 26.5 87.5 29.5Z"
-          fill={greenColor}
-        />
-        {/* Leaf 2 (Center Upward Leaf - large) */}
-        <path
-          d="M95 24C92 14.5 99.5 3.5 105.5 5C112 6.5 110.5 18 107.5 23.5C106 26.5 97.5 28.5 95 24Z"
-          fill={greenColor}
-        />
-        {/* Leaf 3 (Right Leaf - medium) */}
-        <path
-          d="M102 27C107.5 27.5 116.5 36.5 117.5 42C118.5 47 110.5 46.5 105.5 41C103.5 39 100.5 32 102 27Z"
-          fill={greenColor}
-        />
-
-        {/* Stylized N */}
-        <path
-          d="M122 80V25H135.5L157 58V25H169V80H156L134.5 46.5V80H122Z"
-          fill={fillColor}
-        />
-
-        {/* Stylized T */}
-        <path
-          d="M197.5 35.5H177V25H231V35.5H210.5V80H197.5V35.5Z"
-          fill={fillColor}
-        />
-
-        {/* B2B SOLUTIONS Subtitle text */}
-        {/* B */}
-        <path
-          d="M16.5 127V105H26.5C31.5 105 34.5 107 34.5 110C34.5 112 33 113.5 31 114.5C33.5 115 35.5 117 35.5 120.5C35.5 124.5 31.5 127 26.5 127H16.5ZM21.5 114H25.5C28 114 29.5 113 29.5 111.5C29.5 110 28 109 25.5 109H21.5V114ZM21.5 123H26C28.5 123 30.5 122 30.5 120C30.5 118 28.5 117 26 117H21.5V123Z"
-          fill={fillColor}
-        />
-        {/* 2 - Green accent */}
-        <path
-          d="M40.5 127V124L48 116.5C50 114.5 51 113 51 111.5C51 109.5 49.5 108.5 47 108.5C44.5 108.5 42.5 110 42.5 112.5H37.5C37.5 107.5 41.5 104.5 47 104.5C52.5 104.5 56 107.5 56 111.5C56 114 54 116.5 51.5 119L46.5 124V124.5H56.5V127H40.5Z"
-          fill={greenColor}
-        />
-        {/* B */}
-        <path
-          d="M62 127V105H72C77 105 80 107 80 110C80 112 78.5 113.5 76.5 114.5C79 115 81 117 81 120.5C81 124.5 77 127 72 127H62ZM67 114H71C73.5 114 75 113 75 111.5C75 110 73.5 109 71 109H67V114ZM67 123H71.5C74 123 76 122 76 120C76 118 74 117 71.5 117H67V123Z"
-          fill={fillColor}
-        />
-        
-        {/* SOLUTIONS */}
-        {/* S */}
-        <path
-          d="M98.5 121.5C98.5 124.5 95.5 127.5 90.5 127.5C85.5 127.5 83 124.5 83 121.5H88C88 123 89 124 90.5 124C92 124 93.5 123 93.5 121.5C93.5 120 92.5 119.5 90 118.5L88.5 118C85 116.5 83.5 115 83.5 112.5C83.5 109.5 86.5 106.5 90.5 106.5C94.5 106.5 97.5 109 97.5 112.5H92.5C92.5 110.5 91.5 110 90.5 110C89 110 88.5 111 88.5 112C88.5 113 89.5 113.5 91.5 114.5L93 115C96.5 116.5 98.5 118.5 98.5 121.5Z"
-          fill={fillColor}
-        />
-        {/* O */}
-        <path
-          d="M101.5 117C101.5 110.5 105.5 106.5 111.5 106.5C117.5 106.5 121.5 110.5 121.5 117C121.5 123.5 117.5 127.5 111.5 127.5C105.5 127.5 101.5 123.5 101.5 117ZM116.5 117C116.5 112.5 114.5 110.5 111.5 110.5C108.5 110.5 106.5 112.5 106.5 117C106.5 121.5 108.5 123.5 111.5 123.5C114.5 123.5 116.5 121.5 116.5 117Z"
-          fill={fillColor}
-        />
-        {/* L */}
-        <path
-          d="M126.5 107.5V127H139.5V123H131.5V107.5H126.5Z"
-          fill={fillColor}
-        />
-        {/* U */}
-        <path
-          d="M144.5 107.5V119C144.5 123.5 147.5 127 152.5 127C157.5 127 160.5 123.5 160.5 119V107.5H155.5V119C155.5 121.5 154.5 123 152.5 123C150.5 123 149.5 121.5 149.5 119V107.5H144.5Z"
-          fill={fillColor}
-        />
-        {/* T */}
-        <path
-          d="M174.5 111.5H168V107.5H186V111.5H179.5V127H174.5V111.5Z"
-          fill={fillColor}
-        />
-        {/* I */}
-        <path
-          d="M190.5 107.5H195.5V127H190.5V107.5Z"
-          fill={fillColor}
-        />
-        {/* O */}
-        <path
-          d="M200.5 117C200.5 110.5 204.5 106.5 210.5 106.5C216.5 106.5 220.5 110.5 220.5 117C220.5 123.5 216.5 127.5 210.5 127.5C204.5 127.5 200.5 123.5 200.5 117ZM215.5 117C215.5 112.5 213.5 110.5 210.5 110.5C207.5 110.5 205.5 112.5 205.5 117C205.5 121.5 207.5 123.5 210.5 123.5C213.5 123.5 215.5 121.5 215.5 117Z"
-          fill={fillColor}
-        />
-        {/* N */}
-        <path
-          d="M225.5 127V107.5H230.5L241 120V107.5H246V127H241L230.5 114.5V127H225.5Z"
-          fill={fillColor}
-        />
-        {/* S */}
-        <path
-          d="M266.5 121.5C266.5 124.5 263.5 127.5 258.5 127.5C253.5 127.5 251 124.5 251 121.5H256C256 123 257 124 258.5 124C260 124 261.5 123 261.5 121.5C261.5 120 260.5 119.5 258 118.5L256.5 118C253 116.5 251.5 115 251.5 112.5C251.5 109.5 254.5 106.5 258.5 106.5C262.5 106.5 265.5 109 265.5 112.5H260.5C260.5 110.5 259.5 110 258.5 110C257 110 256.5 111 256.5 112C256.5 113 257.5 113.5 259.5 114.5L261 115C264.5 116.5 266.5 118.5 266.5 121.5Z"
-          fill={fillColor}
-        />
-      </svg>
+    <div className={`flex items-center gap-2 ${className}`} style={{ height }}>
+      <Image
+        src="/logo.png"
+        alt="Mint B2B Solutions"
+        width={280}
+        height={96}
+        className="h-full w-auto object-contain max-h-full scale-105"
+        priority
+      />
     </div>
   );
 }

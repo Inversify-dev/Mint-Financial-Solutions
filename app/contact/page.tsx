@@ -71,7 +71,6 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
-
   const [errorMsg, setErrorMsg] = useState('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -84,6 +83,36 @@ export default function ContactPage() {
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
+
+    // Client-side Validation for Mandatory Fields (Name, Company, Role, Email, Phone)
+    if (!formData.name.trim()) {
+      setErrorMsg('Full Name is required.');
+      return;
+    }
+    if (!formData.company.trim()) {
+      setErrorMsg('Company / Practice Name is required.');
+      return;
+    }
+    if (!formData.role.trim()) {
+      setErrorMsg('Your Role / Title is required.');
+      return;
+    }
+    if (!formData.email.trim()) {
+      setErrorMsg('Email Address is required.');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email.trim())) {
+      setErrorMsg('Please enter a valid Email Address format.');
+      return;
+    }
+
+    if (!formData.phone.trim()) {
+      setErrorMsg('Phone Number is required.');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -132,7 +161,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="bg-premium-gradient min-h-screen pt-28 pb-16">
+    <div className="bg-premium-gradient min-h-screen pt-24 sm:pt-28 pb-16">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -144,104 +173,97 @@ export default function ContactPage() {
           variants={staggerContainer}
           initial="hidden"
           animate="visible"
-          className="text-center max-w-3xl mx-auto mb-16"
+          className="text-center max-w-3xl mx-auto mb-10 sm:mb-16"
         >
           <motion.span variants={fadeInUp} className="text-xs font-bold text-primary uppercase tracking-widest">Contact Us</motion.span>
-          <motion.h1 variants={fadeInUp} className="text-4xl sm:text-5xl lg:text-6xl font-extrabold font-display leading-tight text-gradient mt-3 mb-6">
+          <motion.h1 variants={fadeInUp} className="text-3xl sm:text-5xl lg:text-6xl font-extrabold font-display leading-tight text-gradient mt-3 mb-4 sm:mb-6 px-2">
             Connect with Our Operations Center
           </motion.h1>
-          <motion.p variants={fadeInUp} className="text-base text-charcoal-light leading-relaxed max-w-2xl mx-auto">
+          <motion.p variants={fadeInUp} className="text-sm sm:text-base text-charcoal-light leading-relaxed max-w-2xl mx-auto px-2">
             Discuss how Mint Business Solutions can streamline your practice administration, advice formatting, and accounts compliance. Connect with our Melbourne headquarters or our Colombo operations center directly.
           </motion.p>
         </motion.div>
 
-        {/* Core Layout: Contact details and Inquiry form */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch mb-24 max-w-6xl mx-auto">
+        {/* Core Layout: Contact details & Live Map + Inquiry form */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch mb-16 sm:mb-24 max-w-6xl mx-auto">
 
-          {/* Column 1: Contact Details & Visual Map (5 columns) */}
+          {/* Column 1: Contact Details & Live Interactive Map (5 columns) */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-5 flex flex-col justify-between gap-10"
+            className="lg:col-span-5 flex flex-col justify-between gap-5 h-full"
           >
             {/* Contact details card */}
-            <div className="bg-white border border-neutral-100 p-6 sm:p-8 rounded-3xl shadow-sm flex flex-col gap-6">
-              <h2 className="text-xl font-bold text-charcoal font-display">Office Directory</h2>
+            <div className="bg-white border border-neutral-100 p-5 sm:p-6 rounded-3xl shadow-sm flex flex-col gap-4 flex-shrink-0">
+              <h2 className="text-lg font-bold text-charcoal font-display">Office Directory</h2>
 
-              <ul className="space-y-5">
+              <ul className="space-y-3.5">
                 <li className="flex items-start gap-3">
-                  <MapPin size={20} className="text-primary flex-shrink-0 mt-0.5" />
-                  <div className="text-sm text-charcoal-light leading-relaxed">
-                    <p className="font-semibold text-charcoal text-base">Colombo Operations Branch</p>
-                    <p className="font-bold text-xs text-charcoal-light">Mint Business Solutions Private Limited</p>
+                  <MapPin size={18} className="text-primary flex-shrink-0 mt-0.5" />
+                  <div className="text-xs text-charcoal-light leading-relaxed">
+                    <p className="font-semibold text-charcoal text-sm">Colombo Operations Branch</p>
+                    <p className="font-bold text-[10px] text-charcoal-light">Mint Business Solutions Private Limited</p>
                     <p>46a S. De S. Jayasinghe Mawatha</p>
                     <p>Colombo 10350, Sri Lanka</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <MapPin size={20} className="text-primary flex-shrink-0 mt-0.5" />
-                  <div className="text-sm text-charcoal-light leading-relaxed">
-                    <p className="font-semibold text-charcoal text-base">Melbourne Head Office</p>
+                  <MapPin size={18} className="text-primary flex-shrink-0 mt-0.5" />
+                  <div className="text-xs text-charcoal-light leading-relaxed">
+                    <p className="font-semibold text-charcoal text-sm">Melbourne Head Office</p>
                     <p>13 Berrima Street, Oakleigh East</p>
                     <p>VIC 3166, Melbourne, Australia</p>
                   </div>
                 </li>
                 <li className="flex items-center gap-3">
-                  <Phone size={18} className="text-primary flex-shrink-0" />
-                  <a href="tel:+94718876743" className="text-sm text-charcoal-light hover:text-primary transition-colors font-medium">
+                  <Phone size={16} className="text-primary flex-shrink-0" />
+                  <a href="tel:+94718876743" className="text-xs text-charcoal-light hover:text-primary transition-colors font-medium">
                     +94 71 887 6743 (Colombo Office)
                   </a>
                 </li>
                 <li className="flex items-center gap-3">
-                  <Phone size={18} className="text-primary flex-shrink-0" />
-                  <a href="tel:+94718876743" className="text-sm text-charcoal-light hover:text-primary transition-colors font-medium">
-                    +94 71 887 6743 (Colombo Office)
-                  </a>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Mail size={18} className="text-primary flex-shrink-0" />
-                  <a href="mailto:enquiries@mintfinancialsolutions.com.au" className="text-sm text-charcoal-light hover:text-primary transition-colors font-medium">
+                  <Mail size={16} className="text-primary flex-shrink-0" />
+                  <a href="mailto:enquiries@mintfinancialsolutions.com.au" className="text-xs text-charcoal-light hover:text-primary transition-colors font-medium break-all">
                     enquiries@mintfinancialsolutions.com.au
                   </a>
                 </li>
               </ul>
 
-              {/* Extra compliance badge */}
-              <div className="border border-neutral-50 bg-neutral-50/40 p-4 rounded-2xl flex items-center gap-3">
-                <Shield size={20} className="text-primary flex-shrink-0" />
-                <p className="text-xs text-neutral-400 leading-normal">
+              {/* Security Badge */}
+              <div className="border border-neutral-100 bg-neutral-50/60 p-3 rounded-2xl flex items-center gap-2.5">
+                <Shield size={18} className="text-primary flex-shrink-0" />
+                <p className="text-[10px] sm:text-[11px] text-neutral-500 leading-normal">
                   Privacy Act & Australian Privacy Principles compliant. Strict physical and network governance.
                 </p>
               </div>
             </div>
 
-            {/* Stylized Visual Mock Map Component */}
-            <div className="bg-[#0f1115] text-white p-6 rounded-3xl shadow-lg relative overflow-hidden flex-grow min-h-[220px] flex flex-col justify-between">
-              {/* Compass grid graphics */}
-              <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
-              <div className="absolute top-1/2 left-1/3 w-32 h-32 bg-primary/20 rounded-full blur-2xl pointer-events-none" />
-
-              <div className="relative z-10 flex justify-between items-start">
+            {/* Live Interactive Google Map Card */}
+            <div className="bg-white border border-neutral-100 p-4 rounded-3xl shadow-sm flex flex-col gap-2.5 flex-1 min-h-[200px]">
+              <div className="flex justify-between items-center px-1 flex-shrink-0">
                 <div>
-                  <span className="text-xs font-bold border border-white/20 bg-white/10 px-3 py-1 rounded-full uppercase tracking-wider">
-                    Location Center
+                  <span className="text-[10px] font-bold border border-primary/20 bg-primary/10 text-primary px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                    Live Operations Map
                   </span>
-                  <p className="text-base font-bold mt-3 font-display">S. De S. Jayasinghe Mawatha</p>
+                  <p className="text-xs font-bold text-charcoal mt-1">Colombo Center</p>
                 </div>
-                <Clock size={18} className="text-neutral-400" />
+                <Clock size={16} className="text-neutral-400" />
               </div>
 
-              {/* Graphic representations of the coordinate point */}
-              <div className="relative z-10 my-6 flex justify-center items-center h-20">
-                <div className="w-10 h-10 rounded-full bg-primary/20 border border-primary flex items-center justify-center animate-pulse">
-                  <div className="w-3 h-3 rounded-full bg-primary" />
-                </div>
-              </div>
-
-              <div className="relative z-10 text-xs text-neutral-400 flex justify-between border-t border-white/10 pt-3">
-                <span>Lat: 6.8741° N</span>
-                <span>Lon: 79.8920° E</span>
+              {/* Embedded Live Google Map */}
+              <div className="w-full flex-1 min-h-[150px] rounded-2xl overflow-hidden border border-neutral-200 shadow-inner">
+                <iframe
+                  title="Mint Colombo Operations Map"
+                  src="https://maps.google.com/maps?q=46a+S.+De+S.+Jayasinghe+Mawatha,+Colombo+10350,+Sri+Lanka&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="w-full h-full rounded-2xl"
+                />
               </div>
             </div>
           </motion.div>
@@ -251,68 +273,71 @@ export default function ContactPage() {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-7 bg-white border border-neutral-100 p-6 sm:p-10 rounded-3xl shadow-xl flex flex-col justify-between relative overflow-hidden"
+            className="lg:col-span-7 bg-white border border-neutral-100 p-5 sm:p-7 rounded-3xl shadow-xl flex flex-col justify-between h-full relative overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-24 h-24 bg-accent-light rounded-full blur-3xl pointer-events-none" />
 
             {!submitted ? (
-              <form onSubmit={handleFormSubmit} className="space-y-6 relative z-10 w-full">
-                <div className="border-b border-neutral-50 pb-4">
-                  <h2 className="text-xl font-bold text-charcoal font-display">Submit Inquiry</h2>
+              <form onSubmit={handleFormSubmit} className="space-y-5 sm:space-y-6 relative z-10 w-full" noValidate>
+                <div className="border-b border-neutral-100 pb-3 sm:pb-4">
+                  <h2 className="text-lg sm:text-xl font-bold text-charcoal font-display">Submit Inquiry</h2>
                   <p className="text-xs text-neutral-400 mt-1">Fields marked * are mandatory.</p>
                 </div>
 
                 {errorMsg && (
-                  <div className="bg-rose-50 border border-rose-200 text-rose-700 text-xs p-3.5 rounded-xl">
-                    {errorMsg}
-                  </div>
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-rose-50 border border-rose-200 text-rose-700 text-xs sm:text-sm p-3.5 rounded-xl font-medium"
+                  >
+                    ⚠️ {errorMsg}
+                  </motion.div>
                 )}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">Full Name *</label>
+                    <label className="block text-[11px] sm:text-xs font-semibold text-charcoal uppercase tracking-wider mb-1.5">Full Name *</label>
                     <input
                       type="text"
                       name="name"
-                      required
                       value={formData.name}
                       onChange={handleInputChange}
                       placeholder="e.g. John Citizen"
-                      className="w-full bg-neutral-50 border border-neutral-200 text-sm px-4 py-3.5 rounded-xl focus:outline-none focus:border-primary text-charcoal"
+                      className="w-full bg-neutral-50 border border-neutral-200 text-xs sm:text-sm px-3.5 py-3 sm:py-3.5 rounded-xl focus:outline-none focus:border-primary text-charcoal"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">Company / Practice Name</label>
+                    <label className="block text-[11px] sm:text-xs font-semibold text-charcoal uppercase tracking-wider mb-1.5">Company / Practice Name *</label>
                     <input
                       type="text"
                       name="company"
                       value={formData.company}
                       onChange={handleInputChange}
                       placeholder="e.g. Apex Wealth Planning"
-                      className="w-full bg-neutral-50 border border-neutral-200 text-sm px-4 py-3.5 rounded-xl focus:outline-none focus:border-primary text-charcoal"
+                      className="w-full bg-neutral-50 border border-neutral-200 text-xs sm:text-sm px-3.5 py-3 sm:py-3.5 rounded-xl focus:outline-none focus:border-primary text-charcoal"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">Your Role / Title</label>
+                    <label className="block text-[11px] sm:text-xs font-semibold text-charcoal uppercase tracking-wider mb-1.5">Your Role / Title *</label>
                     <input
                       type="text"
                       name="role"
                       value={formData.role}
                       onChange={handleInputChange}
                       placeholder="e.g. Principal Adviser"
-                      className="w-full bg-neutral-50 border border-neutral-200 text-sm px-4 py-3.5 rounded-xl focus:outline-none focus:border-primary text-charcoal"
+                      className="w-full bg-neutral-50 border border-neutral-200 text-xs sm:text-sm px-3.5 py-3 sm:py-3.5 rounded-xl focus:outline-none focus:border-primary text-charcoal"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">Service of Interest *</label>
+                    <label className="block text-[11px] sm:text-xs font-semibold text-charcoal uppercase tracking-wider mb-1.5">Service of Interest</label>
                     <select
                       name="service"
                       value={formData.service}
                       onChange={handleInputChange}
-                      className="w-full bg-neutral-50 border border-neutral-200 text-sm px-4 py-3.5 rounded-xl focus:outline-none focus:border-primary text-charcoal cursor-pointer"
+                      className="w-full bg-neutral-50 border border-neutral-200 text-xs sm:text-sm px-3.5 py-3 sm:py-3.5 rounded-xl focus:outline-none focus:border-primary text-charcoal cursor-pointer"
                     >
                       <option value="financial-planning">Financial Planning Support</option>
                       <option value="accounting">Accounting & Bookkeeping</option>
@@ -324,49 +349,47 @@ export default function ContactPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">Email Address *</label>
+                    <label className="block text-[11px] sm:text-xs font-semibold text-charcoal uppercase tracking-wider mb-1.5">Email Address *</label>
                     <input
                       type="email"
                       name="email"
-                      required
                       value={formData.email}
                       onChange={handleInputChange}
                       placeholder="name@company.com.au"
-                      className="w-full bg-neutral-50 border border-neutral-200 text-sm px-4 py-3.5 rounded-xl focus:outline-none focus:border-primary text-charcoal"
+                      className="w-full bg-neutral-50 border border-neutral-200 text-xs sm:text-sm px-3.5 py-3 sm:py-3.5 rounded-xl focus:outline-none focus:border-primary text-charcoal"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">Phone Number *</label>
+                    <label className="block text-[11px] sm:text-xs font-semibold text-charcoal uppercase tracking-wider mb-1.5">Phone Number *</label>
                     <input
                       type="tel"
                       name="phone"
-                      required
                       value={formData.phone}
                       onChange={handleInputChange}
                       placeholder="e.g. +61 412 345 678"
-                      className="w-full bg-neutral-50 border border-neutral-200 text-sm px-4 py-3.5 rounded-xl focus:outline-none focus:border-primary text-charcoal"
+                      className="w-full bg-neutral-50 border border-neutral-200 text-xs sm:text-sm px-3.5 py-3 sm:py-3.5 rounded-xl focus:outline-none focus:border-primary text-charcoal"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">Message / Inquiry Details</label>
+                  <label className="block text-[11px] sm:text-xs font-semibold text-charcoal uppercase tracking-wider mb-1.5">Message / Inquiry Details (Optional)</label>
                   <textarea
                     name="message"
                     rows={4}
                     value={formData.message}
                     onChange={handleInputChange}
                     placeholder="Briefly describe your team capacity needs or pipeline software details..."
-                    className="w-full bg-neutral-50 border border-neutral-200 text-sm px-4 py-3.5 rounded-xl focus:outline-none focus:border-primary text-charcoal resize-none"
+                    className="w-full bg-neutral-50 border border-neutral-200 text-xs sm:text-sm px-3.5 py-3 sm:py-3.5 rounded-xl focus:outline-none focus:border-primary text-charcoal resize-none"
                   />
                 </div>
 
                 <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-primary hover:bg-primary-dark disabled:bg-neutral-200 text-white font-bold py-4 rounded-xl shadow-md shadow-primary/10 transition-colors flex items-center justify-center gap-2 text-sm cursor-pointer"
+                  className="w-full bg-primary hover:bg-primary-dark disabled:bg-neutral-200 text-white font-bold py-3.5 sm:py-4 rounded-xl shadow-md shadow-primary/10 transition-colors flex items-center justify-center gap-2 text-sm cursor-pointer"
                 >
                   {isSubmitting ? (
                     <>
@@ -382,8 +405,8 @@ export default function ContactPage() {
             ) : (
               <div className="text-center py-8 flex flex-col items-center">
                 <CheckCircle size={56} className="text-primary mb-4 animate-bounce" />
-                <h3 className="text-xl font-bold text-charcoal font-display">Inquiry Received!</h3>
-                <p className="text-sm text-charcoal-light leading-relaxed max-w-sm mt-3">
+                <h3 className="text-lg sm:text-xl font-bold text-charcoal font-display">Inquiry Received!</h3>
+                <p className="text-xs sm:text-sm text-charcoal-light leading-relaxed max-w-sm mt-3">
                   Thank you, <strong className="text-charcoal">{formData.name}</strong>. Your operational inquiry for <strong className="text-charcoal">{formData.company}</strong> has been logged. A client transition manager will reach out via email or phone within 24 business hours.
                 </p>
                 <button
@@ -391,7 +414,7 @@ export default function ContactPage() {
                     setSubmitted(false);
                     setFormData({ name: '', company: '', role: '', email: '', phone: '', service: 'financial-planning', message: '' });
                   }}
-                  className="mt-8 text-sm font-bold text-primary hover:underline cursor-pointer"
+                  className="mt-8 text-xs sm:text-sm font-bold text-primary hover:underline cursor-pointer"
                 >
                   Submit another inquiry
                 </button>
@@ -401,16 +424,16 @@ export default function ContactPage() {
         </div>
 
         {/* FAQs section */}
-        <div className="max-w-4xl mx-auto border-t border-neutral-100 pt-20">
-          <div className="text-center max-w-2xl mx-auto mb-12 flex flex-col items-center gap-2">
+        <div className="max-w-4xl mx-auto border-t border-neutral-100 pt-14 sm:pt-20">
+          <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12 flex flex-col items-center gap-2 px-2">
             <HelpCircle size={26} className="text-primary" />
-            <h2 className="text-2xl sm:text-3xl font-bold font-display text-charcoal">Frequently Asked Questions</h2>
-            <p className="text-sm text-charcoal-light">
+            <h2 className="text-xl sm:text-3xl font-bold font-display text-charcoal">Frequently Asked Questions</h2>
+            <p className="text-xs sm:text-sm text-charcoal-light">
               Clear answers regarding security, workflows, training cycles, and technology integrations.
             </p>
           </div>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3 sm:gap-4">
             {FAQS.map((faq, idx) => {
               const isActive = activeFaq === idx;
               return (
@@ -420,19 +443,19 @@ export default function ContactPage() {
                 >
                   <button
                     onClick={() => toggleFaq(idx)}
-                    className="w-full text-left p-5 flex justify-between items-center gap-4 focus:outline-none cursor-pointer"
+                    className="w-full text-left p-4 sm:p-5 flex justify-between items-center gap-4 focus:outline-none cursor-pointer"
                   >
-                    <span className="text-sm sm:text-base font-bold text-charcoal">{faq.q}</span>
+                    <span className="text-xs sm:text-base font-bold text-charcoal">{faq.q}</span>
                     <ChevronDown
                       size={18}
-                      className={`text-charcoal-light transition-transform duration-200 ${isActive ? 'rotate-180 text-primary' : ''}`}
+                      className={`text-charcoal-light transition-transform duration-200 flex-shrink-0 ${isActive ? 'rotate-180 text-primary' : ''}`}
                     />
                   </button>
                   <div
                     className={`transition-all duration-300 ease-in-out overflow-hidden ${isActive ? 'max-h-[300px] border-t border-neutral-50' : 'max-h-0'
                       }`}
                   >
-                    <p className="p-5 text-sm sm:text-base text-charcoal-light leading-relaxed bg-[#fafbfa]/40">
+                    <p className="p-4 sm:p-5 text-xs sm:text-base text-charcoal-light leading-relaxed bg-[#fafbfa]/40">
                       {faq.a}
                     </p>
                   </div>
@@ -446,4 +469,3 @@ export default function ContactPage() {
     </div>
   );
 }
-

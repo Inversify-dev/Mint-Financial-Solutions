@@ -1,12 +1,13 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { Mail, Phone, MapPin, Linkedin, Facebook, Twitter, ShieldCheck, ArrowUpRight, MessageSquare } from 'lucide-react';
+import { Mail, Phone, MapPin, Linkedin, Facebook, Twitter, MessageSquare, X, Send } from 'lucide-react';
 import Logo from './Logo';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [chatOpen, setChatOpen] = useState(false);
 
   const services = [
     { name: 'Paraplanning & Advice Support', href: '/services' },
@@ -17,13 +18,6 @@ export default function Footer() {
     { name: 'Client Support Services', href: '/services' },
   ];
 
-  const industries = [
-    { name: 'Financial Advisers', href: '/industries#advisers' },
-    { name: 'Mortgage Brokers', href: '/industries#brokers' },
-    { name: 'Accounting Firms', href: '/industries#accounting' },
-    { name: 'Property Businesses', href: '/industries#property' },
-  ];
-
   const company = [
     { name: 'About Us', href: '/about' },
     { name: 'Careers', href: '/careers' },
@@ -32,22 +26,18 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-neutral-50 dark:bg-neutral-950 border-t border-neutral-100 dark:border-neutral-900/50 pt-16 pb-12">
+    <footer className="bg-neutral-50 dark:bg-neutral-950 border-t border-neutral-100 dark:border-neutral-900/50 pt-16 pb-12 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 mb-16">
 
           {/* Logo and About column */}
           <div className="lg:col-span-2 flex flex-col gap-6">
             <Link href="/" className="inline-block hover:opacity-90">
-              <Logo height={45} />
+              <Logo height={64} />
             </Link>
             <p className="text-sm text-charcoal-light leading-relaxed max-w-sm">
               Mint Business Solutions provides premium, compliant, and security-certified offshore support teams for Australian financial practices. We help firms unlock growth, optimize overheads, and scale client experiences.
             </p>
-            {/* <div className="flex items-center gap-2 border border-primary/20 bg-accent-light/40 py-2.5 px-4 rounded-xl max-w-xs text-xs font-semibold text-charcoal">
-              <ShieldCheck size={18} className="text-primary flex-shrink-0" />
-              <span>Australian Data Security Standards (Privacy Act compliant)</span>
-            </div> */}
 
             {/* Social media icons */}
             <div className="flex items-center gap-4 mt-2">
@@ -77,19 +67,8 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Industries / Company Navigation */}
+          {/* Company Navigation */}
           <div>
-            {/* <h3 className="text-xs font-bold text-charcoal uppercase tracking-widest mb-5">Industries</h3>
-            <ul className="space-y-3 mb-8">
-              {industries.map((item) => (
-                <li key={item.name}>
-                  <Link href={item.href} className="text-sm text-charcoal-light hover:text-primary hover:underline transition-colors flex items-center gap-0.5">
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul> */}
-
             <h3 className="text-xs font-bold text-charcoal uppercase tracking-widest mb-5">Company</h3>
             <ul className="space-y-3">
               {company.map((item) => (
@@ -102,7 +81,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact and Newsletter column */}
+          {/* Contact column */}
           <div className="flex flex-col gap-6">
             <div>
               <h3 className="text-xs font-bold text-charcoal uppercase tracking-widest mb-5">Get in Touch</h3>
@@ -125,29 +104,12 @@ export default function Footer() {
                 </li>
                 <li className="flex items-center gap-2.5">
                   <Mail size={16} className="text-primary flex-shrink-0" />
-                  <a href="mailto:enquiries@mintfinancialsolutions.com.au" className="text-sm text-charcoal-light hover:text-primary transition-colors font-medium">
+                  <a href="mailto:enquiries@mintfinancialsolutions.com.au" className="text-sm text-charcoal-light hover:text-primary transition-colors font-medium break-all">
                     enquiries@mintfinancialsolutions.com.au
                   </a>
                 </li>
               </ul>
             </div>
-
-            {/* Newsletter form mockup */}
-            {/* <div className="border border-neutral-100 dark:border-neutral-800 p-4 rounded-2xl bg-white dark:bg-neutral-900 shadow-sm mt-2">
-              <p className="text-xs font-bold text-charcoal mb-2">Subscribe to Insights</p>
-              <p className="text-[11px] text-charcoal-light mb-3">Get advice regulatory alerts and BPO strategies.</p>
-              <form className="flex gap-2" onSubmit={(e) => e.preventDefault()}>
-                <input
-                  type="email"
-                  placeholder="Your email"
-                  className="bg-neutral-50 border border-neutral-200 text-xs px-3 py-2 rounded-xl flex-1 focus:outline-none focus:border-primary text-charcoal"
-                  required
-                />
-                <button type="submit" className="bg-primary hover:bg-primary-dark text-white p-2 rounded-xl flex items-center justify-center transition-colors">
-                  <ArrowUpRight size={14} />
-                </button>
-              </form>
-            </div> */}
           </div>
         </div>
 
@@ -165,15 +127,63 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Floating Let's Chat Button (Email Trigger Aligned to Client Feedback) */}
-      <a
-        href="mailto:enquiries@mintfinancialsolutions.com.au?subject=Let's%20Chat"
-        className="fixed bottom-6 right-6 z-40 bg-primary hover:bg-primary-dark text-white font-bold text-xs py-3.5 px-6 rounded-full shadow-2xl hover:shadow-primary/20 transition-all duration-300 hover:-translate-y-1 flex items-center gap-2 border border-primary-light/20"
-        aria-label="Let's Chat"
-      >
-        <MessageSquare size={16} />
-        <span>Let&apos;s Chat</span>
-      </a>
+      {/* Interactive Floating Chat Widget with Mail & WhatsApp Options */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+        {chatOpen && (
+          <div className="bg-white border border-neutral-200 shadow-2xl rounded-2xl p-4 w-64 flex flex-col gap-2 animate-in fade-in slide-in-from-bottom-3 duration-200">
+            <div className="flex justify-between items-center pb-2 border-b border-neutral-100 mb-1">
+              <span className="text-xs font-bold text-charcoal uppercase tracking-wider">Choose Service</span>
+              <button
+                onClick={() => setChatOpen(false)}
+                className="text-neutral-400 hover:text-charcoal p-1 rounded-md"
+              >
+                <X size={14} />
+              </button>
+            </div>
+
+            {/* Email Option */}
+            <a
+              href="mailto:enquiries@mintfinancialsolutions.com.au?subject=Inquiry%20via%20Website"
+              className="flex items-center gap-3 p-2.5 rounded-xl bg-neutral-50 hover:bg-primary/10 hover:text-primary transition-all text-xs font-semibold text-charcoal group"
+              onClick={() => setChatOpen(false)}
+            >
+              <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+                <Mail size={16} />
+              </div>
+              <div className="flex flex-col">
+                <span>Email Us</span>
+                <span className="text-[10px] text-neutral-400 font-normal">Direct inbox message</span>
+              </div>
+            </a>
+
+            {/* WhatsApp Option */}
+            <a
+              href="https://wa.me/94718876743?text=Hi%20Mint%20Team%2C%20I%20would%20like%20to%20inquire%20about%20your%20services."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 p-2.5 rounded-xl bg-neutral-50 hover:bg-emerald-50 hover:text-emerald-700 transition-all text-xs font-semibold text-charcoal group"
+              onClick={() => setChatOpen(false)}
+            >
+              <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                <Send size={16} />
+              </div>
+              <div className="flex flex-col">
+                <span>WhatsApp Us</span>
+                <span className="text-[10px] text-neutral-400 font-normal">Instant WhatsApp chat</span>
+              </div>
+            </a>
+          </div>
+        )}
+
+        <button
+          onClick={() => setChatOpen(!chatOpen)}
+          className="bg-primary hover:bg-primary-dark text-white font-bold text-xs py-3.5 px-6 rounded-full shadow-2xl hover:shadow-primary/20 transition-all duration-300 hover:-translate-y-1 flex items-center gap-2 border border-primary-light/20 cursor-pointer"
+          aria-label="Let's Chat"
+        >
+          {chatOpen ? <X size={16} /> : <MessageSquare size={16} />}
+          <span>{chatOpen ? 'Close Chat' : "Let's Chat"}</span>
+        </button>
+      </div>
     </footer>
   );
 }

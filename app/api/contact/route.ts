@@ -6,19 +6,46 @@ export async function POST(request: NextRequest) {
 
     const { name, company, role, email, phone, service, message } = body;
 
-    // 1. Basic Validation
-    if (!name?.trim() || !email?.trim() || !message?.trim()) {
+    // 1. Mandatory Fields Validation with Specific Warnings
+    if (!name?.trim()) {
       return NextResponse.json(
-        { message: 'Name, email, and message are required fields.' },
+        { message: 'Full Name is required.' },
         { status: 400 }
       );
     }
 
-    // Email format check
+    if (!company?.trim()) {
+      return NextResponse.json(
+        { message: 'Company / Practice Name is required.' },
+        { status: 400 }
+      );
+    }
+
+    if (!role?.trim()) {
+      return NextResponse.json(
+        { message: 'Your Role / Title is required.' },
+        { status: 400 }
+      );
+    }
+
+    if (!email?.trim()) {
+      return NextResponse.json(
+        { message: 'Email Address is required.' },
+        { status: 400 }
+      );
+    }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
-        { message: 'Invalid email address format.' },
+        { message: 'Please enter a valid Email Address format.' },
+        { status: 400 }
+      );
+    }
+
+    if (!phone?.trim()) {
+      return NextResponse.json(
+        { message: 'Phone Number is required.' },
         { status: 400 }
       );
     }
@@ -38,8 +65,8 @@ export async function POST(request: NextRequest) {
         role,
         email,
         phone,
-        service,
-        message,
+        service: service || 'financial-planning',
+        message: message || '',
       }),
     });
 
