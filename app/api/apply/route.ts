@@ -48,23 +48,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: 'File is too large. Maximum size allowed is 10MB.' }, { status: 400 });
     }
 
-    // 3. reCAPTCHA v3 Validation
-    if (process.env.RECAPTCHA_SECRET_KEY && recaptchaToken) {
-      try {
-        const verifyRes = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`
-        });
-        const verifyData = await verifyRes.json();
-        if (!verifyData.success || verifyData.score < 0.5) {
-          return NextResponse.json({ message: 'Spam validation failed. Please try again.' }, { status: 400 });
-        }
-      } catch (err) {
-        console.error('reCAPTCHA verification error:', err);
-      }
-    }
-
     const wpBase = (process.env.NEXT_PUBLIC_WORDPRESS_URL || '').replace(/\/+$/, '') || 'http://mintb2b.solutions';
     if (!wpBase) {
       return NextResponse.json({ message: 'WordPress URL is not configured.' }, { status: 500 });

@@ -72,6 +72,8 @@ export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
 
+  const [errorMsg, setErrorMsg] = useState('');
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
@@ -79,15 +81,33 @@ export default function ContactPage() {
     });
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMsg('');
     setIsSubmitting(true);
 
-    // Mock API request delay
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const resJson = await res.json();
+
+      if (!res.ok) {
+        throw new Error(resJson.message || 'Failed to send inquiry.');
+      }
+
       setSubmitted(true);
-    }, 2000);
+    } catch (err: unknown) {
+      const error = err as Error;
+      setErrorMsg(error.message || 'An error occurred while sending your inquiry.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const toggleFaq = (index: number) => {
@@ -241,6 +261,12 @@ export default function ContactPage() {
                   <h2 className="text-xl font-bold text-charcoal font-display">Submit Inquiry</h2>
                   <p className="text-xs text-neutral-400 mt-1">Fields marked * are mandatory.</p>
                 </div>
+
+                {errorMsg && (
+                  <div className="bg-rose-50 border border-rose-200 text-rose-700 text-xs p-3.5 rounded-xl">
+                    {errorMsg}
+                  </div>
+                )}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
